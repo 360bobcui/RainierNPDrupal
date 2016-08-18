@@ -1,0 +1,5 @@
+name = "My First Module"
+description = "Provides a really neat widget for your site's sidebar."
+core = "7.x"
+php = "5.2.4"
+version = "7.x-1.0"

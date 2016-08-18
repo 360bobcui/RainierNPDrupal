@@ -1,0 +1,54 @@
+<?php 
+
+function myfirstmodule_api_schema() {
+
+  $schema['custom_booking'] = array(
+    'description' => 'To store the booking flight.',
+    'fields' => array(
+      'bid' => array(
+       'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The booking id.',        
+      ),
+      'source' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'The source city for the booking.',
+      ),
+      'destination' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'The destination city for the booking.',
+      ),
+      'bdate' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,        
+        'description' => 'The date of the booking',
+      ),
+      'amount' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,        
+        'description' => 'The amount of the booking',
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,        
+        'description' => 'The status of the booking(0 -> In process, 1 -> completed)',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,        
+        'description' => 'The user id of the booking',
+      ),
+    ),
+    'primary key' => array('bid'),
+  );
+
+  return $schema;
+
+}

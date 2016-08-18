@@ -1,0 +1,24 @@
+<?php
+
+/* 
+ * Implements hook_schema
+ */
+function flag_application_schema() {
+  $schema['flag_application'] = array(
+    'description' => 'The flag application table to track the status of flags!',
+    'fields' => array(
+      'flagging_id' => array(
+        'description' => 'flagging ids defined in flag modules',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'status 0 pending, 1 approved, 2 denied',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('flagging_id'),
+  );
+  return $schema;
+}

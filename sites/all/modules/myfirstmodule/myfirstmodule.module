@@ -1,0 +1,27 @@
+<?php
+
+/**
+* @file
+* myfirstmodule.module
+*/
+
+function myfirstmodule_block_info() {  
+  $blocks['myblock'] = array(
+    'info' => t('My Block'),
+  );
+  return $blocks;
+}
+
+function myfirstmodule_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+
+  switch ($delta) {
+    case 'myblock':
+      $block['subject'] = t('Mt Rainier Reservation System');
+      $block['content'] = "test";
+      break;
+  }
+  return $block;
+}
+

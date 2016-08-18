@@ -1,0 +1,109 @@
+<?php
+
+/**
+* implements hook_menu
+*/
+/**
+ * Define default flags.
+ */
+function flag_application_menu() {
+  $items['admin/structure/flags/flag_application1'] = array(
+    'title' => 'Flag Appplications',
+    'description' => 'Find and manage flag applications.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('flag_application_form'),
+    //'access arguments' => array('access content overview'),
+    'access callback'=> 'flag_application_permission',
+    'weight' => 0,
+    'file' => 'flag_application.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_permission(),
+ */
+function flag_application_permission(){
+    return TRUE;
+}
+
+/**
+* implements hook_flag_default_flags
+*/
+/**
+ * Define default flags.
+ */
+function flag_application_flag_default_flags() {
+  $flags = array();
+  // Exported flag: "Flag Application 1".
+  $flags['flag_application_1'] = array(
+    'entity_type' => 'node',
+    'title' => 'Flag Application 1',
+    'global' => 0,
+    'types' => array(),
+    'flag_short' => 'Apply',
+    'flag_long' => 'Apply for this',
+    'flag_message' => 'Thanks for applying',
+    'unflag_short' => 'Remove your application from this site',
+    'unflag_long' => 'Your application has been removed',
+    'unflag_message' => 'Application removed',
+    'unflag_denied_text' => '',
+    'link_type' => 'toggle',
+    'weight' => 0,
+    'show_in_links' => array(
+      'full' => 'full',
+      'teaser' => 'teaser',
+      'rss' => 0,
+      'search_index' => 0,
+      'search_result' => 0,
+      'rooms_list' => 0,
+      'token' => 0,
+    ),
+    'show_as_field' => 1,
+    'show_on_form' => 0,
+    'access_author' => '',
+    'show_contextual_link' => 0,
+    'i18n' => 0,
+    'api_version' => 3,
+  );
+  return $flags;
+}
+
+
+/**
+ * Act on an object being flagged.
+ *
+ * @param flag_flag $flag
+ *  The flag object.
+ * @param int $entity_id
+ *  The id of the entity the flag is on.
+ * @param $account
+ *  The user account performing the action.
+ * @param $flagging_id
+ *  The flagging entity.
+ *  implements hook_flag_flag
+ */
+function flag_application_flag_flag($flag, $entity_id, $account, $flagging) {
+  dsm($flagging);
+  if ($flag->name == 'flag_application_1') {
+    $nid = db_insert('flag_application')
+        ->fields(array(
+          'flagging_id' => $flagging->flagging_id,
+         // 'entity_id' => $entity_id,
+         // 'uid' => $account->uid,
+          'status' => 0,
+        ))
+        ->execute();    
+  }     
+}
+
+/**
+ * Implements a hook_flag_unflag
+ */
+function flag_application_flag_unflag($flag, $entity_id, $account, $flagging) {
+  if ($flag->name == 'flag_application_1') {
+      $deleted = db_delete('flag_application')
+          ->condition('flagging_id', $flagging->flagging_id)
+          ->execute();
+  }
+}

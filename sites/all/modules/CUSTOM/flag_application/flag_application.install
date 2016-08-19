@@ -22,3 +22,5 @@ function flag_application_schema() {
   );
   return $schema;
 }
+
+

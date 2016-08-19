@@ -1,0 +1,275 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+function site_reservation_schema(){
+  $schema = array();
+  
+  // build site location table
+  $schema['site_locations'] = array(
+  'description' => 'table for camp site locations!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'camp site id',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => TRUE,
+    ),
+    'metid' => array(
+      'description' => 'in the metid',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => FALSE,
+    ),
+    'type' => array(
+      'description' => 'camp site type',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'code' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'fullname' => array(
+      'description' => 'camp site name',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+  ),
+  'primary key' => array('id'),
+);
+  
+  $schema['site_info'] = array(
+  'description' => 'TODO: Store all the camp names and capcities!',
+  'fields' => array(
+    'id' => array(
+      'description' => 'camp id',
+      'type' => 'int',
+      'length' => 3,
+      'not null' => TRUE,
+    ),
+    'capacity' => array(
+      'description' => 'capacity',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'fullname' => array(
+      'description' => 'name of the camp site',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+    'metid' => array(
+      'description' => 'defined in site_location table',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'type' => array(
+      'description' => 'defined in site_location table!',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+    'code' => array(
+      'description' => 'defined in site_location code',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+  ),
+  );
+
+  
+  // build permits table
+  $schema['site_permits'] = array(
+  'description' => 'table for permits',
+  'fields' => array(
+    'id' => array(
+      'description' => 'site id',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => TRUE,
+    ),
+    'uid' => array(
+      'description' => 'user id',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => TRUE,
+    ),
+    'version' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => FALSE,
+    ),
+    'date' => array(
+      'description' => 'date the permit is good for',
+      'type' => 'text',
+//      'type' => 'datetime',
+//      'mysql_type' => 'datetime',
+      'not null' => TRUE,
+      //'default' => 'CURRENT_TIMESTAMP',
+    ),
+    'site_id' => array(
+      'description' => 'site id defined in site_info',
+      'type' => 'int',
+      'length' => 3,
+      'not null' => TRUE,
+    ),
+  ),
+  'primary key' => array('id'),
+);
+  
+  // build site user table
+ $schema['site_users'] = array(
+  'description' => 'table for users who are reserving camp sites',
+  'fields' => array(
+    'id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => TRUE,
+    ),
+    'speical' => array(
+      'description' => '0: administrative, 1, ibp, 2, speical!',
+      'type' => 'int',
+      'length' => 1,
+      'not null' => FALSE,
+    ),
+    'name1' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'name2' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'addr1' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'addr2' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'city' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'state' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'country' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'zipcode' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'vehicle1' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'vehicle2' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'phone' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'fax' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'email' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'comment' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'text',
+      'not null' => FALSE,
+    ),
+    'contact_id' => array(
+      'description' => 'TODO: please describe this field!',
+      'type' => 'int',
+      'length' => 11,
+      'not null' => FALSE,
+    ),
+  ),
+);
+ 
+  return $schema;
+}
+
+/*
+ * load default values
+ */
+
+function site_reservation_enable() {
+  $locations = array(
+    'A Camp Cutis Alpine', 'A Camp Muir Alpine','A Camp Schurman Alpine',
+    'A Carbon Alpine Zone','A Colonades Alpine Zone','A Cowlitz Glacier Alpine',
+    'A Emmons Flats Alpine Zone', 'A Emmons Glacier Alpine Zone','A Ingraham Flats Alpine Zone',
+    'A Inter Glacier Alpine Zone', 'A Kautz Alpine Zone', 'A Little Tahoma Alpine Zone',
+    'A Lower Nisqually Alpine Zone', 'A Muir Snowfield Alpine Zone', 'A Nisqually Alpine Zone',
+    'A Ptzrmigan Alpine Zone', 'A Summit Alpine Zone', 'A Thumb Rock Alpine Camp', 'A Tokaloo Alpine Zone',
+    'A Wilson Alpine Zone', 'A Winthrop Alpine Zone','A Berkeley Park Camp', 'A Carbon River Camp',
+    'A Cataract Valley Camp', 'A Deer Creek Camp','A Devils Dream Camp','A Dick Creek Camp', 'A Dicks Lake Camp',
+    'A Eagles Roost Camp','A Fire Creek Camp', 'A Forest Lake Camp', 'A Glacier Basin Camp', 'A Golden Lakes Camp',
+    'Granite Creek Camp','Indian Bar Camp','Ipsut Creek Walk-In Camp', 'James Camp', 'Klapatche Park Camp',
+    'Lake Eleanor Camp','A Lake George Camp', 'A Lower Crystal Lake Camp','A Maple Creek Camp', 'Mowich Lake Walk-in Camp',
+    'Mystic Camp','Nickel Creek Camp','No. Puyallup River Camp','Olallie Creek Camp','Other', 'Paradise River Cmap',
+    'Pyramid Creek Camp','Shriner Peak Camp','Shriner Peak Camp','Snow Lake Camp','So. Mowich River Camp',
+    'So. Puyallup River Camp', 'Summerland Camp', 'Sunrise Walk-in Camp', 'Tamanos Creek Camp', 'Tamanos Creek Camp',
+    'Three Lakes Camp', 'Upper Crystal Lake Camp', 'Upper Palisades Lake Camp', 'White River Walk-in Camp',
+    'X Alki Crest Cross Country Zone', 'X Backbone Ridge Cross Country Zone', 'X Burnt Park Cross Country Zone',
+    'X Carbon River West Cross Country Zone', 'X Cayuse Pass Cross Country Zone', 'X Chenuis Lakes Cross Country Zone',
+    'X Colonades Cross Country Zone', 'X Cowlitz Park Cross Country Zone', 'X Crescent Lake Cross Country Zone',
+    'X Crystal Mountain', 'X Deadwood Lakes Cross Country Zone', 'X Dewey Creek', 'X Double Peak', 'X Eagle Peak',
+    'X Echo Cliffs','X Elizabeth Ridge', 'X Elysian Fields', 'X Fryingpan Creek', 'X Glacier Island', 'X Goat',
+    'X Golden Island', 'X Gove Peak', 'X Governors Ridge','X Grand Park', 'X Green Park', 'X Huckleberry Park',
+    'X Kenworthy Lakes','X Lake Eleanor', 'X Laughingwater North', 'X Laughingwater South', 'X Lost Creek',
+    'X Lower Carbon River', 'X Lower Crystal Mountain', 'X Lower Fryingpan', 'X Lower Goat Island Mountain',
+    'X Lower Kautz Creek', 'X Lower Mowich River', 'Lower Ohanapecosh', 'Lower Palisades', 'Lower West Fork',
+    'X McNeeley Peak', 'X Mineral Mountain', 'X Mist Park', 'X Moraine Park', 'X Mother Mountain', 'X Mount Ruth',
+    'X Mount Wow', 'X Muddy Fork of the Cowlitz', 'X Nickel Creek', 'X North Carbon River', 'X Northern Lakes',
+    'X Ohanapecosh Park', 'X Old Desolate', 'X Ptarmigan Ridge', 'X Pyramid Peak', 'X Sarvent', 'X Satulick Mountain',
+    'X Scarface', 'X Seattle Park', 'X Shriner Peak', 'X Skyscraper Mountain', 'X Slide Mountain', 'X Stevens Canyon South',
+    'X Stevens Ridge', 'X Sunrise Ridge North', 'X Sunrise Rise South',  'X Tahoma Creek', 'X Tamanos Mountain',
+    'X Tatoosh Creek', 'X Tatoosh Range East', 'X Tatoosh Range West', 'X Tirzah Peak', 'X Tyee Peak', 'X Upper Carbon',
+    'X Upper Granite Creek', 'X Upper Kautz Creek','X Upper Mowich River', 'X Upper Nisqually', 'X Upper West Side Road'
+  );
+  //dsm(count($locations));  // 142 as of Aug 19 2016
+  for ($i = 0; $i < count($locations); $i++){
+  $res = db_insert('site_info')
+      ->fields(array(
+          'id' => $i,
+        'fullname' => $locations[$i],
+         'capacity' => 100,
+        'metid' => $i,
+        'type' => 'normal',
+        'code' => '',
+        )
+          )
+        ->execute();    
+  }
+ 
+}

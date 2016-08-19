@@ -1,0 +1,7 @@
+name = "Site Reservation"
+description = "An form and a database table"
+core = 7.x
+version = 7.x-1.0
+dependencies[] = date 
+dependencies[] = datepicker
+

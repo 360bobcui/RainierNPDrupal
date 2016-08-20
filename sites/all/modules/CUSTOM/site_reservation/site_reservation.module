@@ -1,5 +1,13 @@
 <?php
 
+
+//function site_reservation_settings() {
+//  $form = array();
+//  $form['#submit'][] = 'site_selection_form_submit';
+//  dsm($form);
+//  return system_settings_form($form);
+//}
+
 /*
   implement hook_permision()
  */
@@ -17,6 +25,11 @@ function site_reservation_permission(){
       'administer site locations' => array(
        'title' => t('Administer Site Locations'),
         'description' => t('Manage site locations and capacities')
+      ),
+      
+      'site submitted itinerary' => array(
+       'title' => t('Submitted Itinerary Confirmation Page'),
+        'description' => t('Itinerary confirmation page')
       ),
     );
 }
@@ -39,25 +52,38 @@ function site_reservation_menu() {
   
   $items['site_selection'] = array(
     'title' => 'Camp Site Selection',
-    'type' => MENU_CALLBACK,
+    'type' => MENU_SUGGESTED_ITEM,
     'description' => 'allow users select camp sites.',
-    'page callback' => 'site_selection_form', // match the function defined below
-   // 'page callback' => 'drupal_get_form',
+    //'page callback' => 'site_selection_form', // match the function defined below
+    'page callback' => 'drupal_get_form',
    'page arguments' => array('site_selection_form'), // shall match the name in hook_form
     'access arguments' => array('site selections'), //shall match the name in hook_permision
    // 'access callback'=> 'flag_application_permission',
-     // 'file' => 'site_reservation.users.inc',
+    'file' => 'site_selection.inc',
   );
   
-  $items['camp_site_manager'] = array(
+  $items['site_submitted_itinerary'] = array(
+    'title' => 'Your trip has been submitted for review.',
+    'type' => MENU_SUGGESTED_ITEM,
+    'description' => 'Print out the user itinerary page after submission',
+   // 'page callback' => 'site_submitted_itinerary_form', // match the function defined below
+    'page callback' => 'drupal_get_form',
+   'page arguments' => array('site_submitted_itinerary_form'), // shall match the name in hook_form
+    'access arguments' => array('site submitted itinerary'), //shall match the name in hook_permision
+     'file' => 'site_itinerary_confirmation.inc',
+    
+  );
+  
+  $items['site_admin_manager'] = array(
     'title' => 'Camp Site Manager',
+    'type' => MENU_SUGGESTED_ITEM,
     'description' => 'Add and delete the camp sites.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('site_adminstration_form'),
     'access arguments' => array('administer site locations'),
    // 'access callback'=> 'flag_application_permission',
     //'weight' => 0,
-    'file' => 'camp_site.admin.inc',
+    'file' => 'site_admin.admin.inc',
   );
   return $items;
 }
@@ -91,13 +117,20 @@ function site_reservation_form($form, &$form_state) {
      '#date_label_position' => 'within', // See other available attributes and what they do in date_api_elements.inc
      //'#date_timezone' => 'America/Chicago', // Optional, if your date has a timezone other than the site timezone.
      '#date_increment' => 15, // Optional, used by the date_select and date_popup elements to increment minutes and seconds.
-     '#date_year_range' => '-50:+3', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
+     '#date_year_range' => '0:+3', // Optional, used to set the year range (back 3 years and forward 3 years is the default).
   );
     
-  $form['submit'] = array(
+  $form['date_select'] = array(
     '#type' => 'submit',
+    '#name' => 'date_select_btn',
     '#value' => t('Submit'),
-  );     
+    '#submit' => array('site_reservation_sumbit_handler'),
+    );  
+    
+ 
+  
+
+  
   return $form;
 }
 
@@ -109,7 +142,14 @@ function site_reservation_form_validate($form, &$form_state) {
 //  dsm($form);
   $ad = $form_state["values"]["arrival_date"];
   $dd = $form_state["values"]["departure_date"];
-  if ($ad == "") {
+  arrival_date_departure_date_validation($ad, $dd, 'arrival_date', 'departure_date');
+}
+
+/*
+ * Validate the arrival date and departure date passed in. 
+ */
+function arrival_date_departure_date_validation($ad, $dd, $ad_id, $dd_id) {
+   if ($ad == "") {
     form_set_error("arrival_date", "You have entered an invalid arrival date");
   } else if ($dd == ""){
     form_set_error("departure_date", "You have entered an invalid departure date");
@@ -125,108 +165,29 @@ function site_reservation_form_validate($form, &$form_state) {
 //   dsm(date("Y-m-d H:i:s"));  //print: 2016-08-19 09:35:34
 //   dsm(time());
     if ($ad_date - time() < 0) {
-      form_set_error("arrival_date", "Please choose a future date.");
+      form_set_error($ad_id, "Please choose a future date.");
     }    
     if ($dd_date - time() < 0) {
-      form_set_error("departure_date", "Please choose a future date.");
+      form_set_error($dd_id, "Please choose a future date.");
     }
     if ($ad_date - $dd_date > 0){
-      form_set_error("departure_date", "Departure Date should be no earlier than Arrival Date");
+      form_set_error($dd_id, "Departure Date should be no earlier than Arrival Date");
     }    
   } 
+  
 }
 
 
-
 /*
- * validate the submitted  TODO: direct to site_selection_form
+ * validate the submitted 
  */
-function site_reservation_form_submit($form, &$form_state) {
+ //function site_reservation_form_submit($form, &$form_state) {
+  function site_reservation_sumbit_handler($form, &$form_state) {
+//function site_reservation_sumbit_handler($form, &$form_state) {
   $options = array('query' => array(
     "arrival_date" => $form_state["values"]["arrival_date"], 
     "departure_date" => $form_state["values"]["departure_date"],)
     );
   drupal_goto('site_selection', $options);  
+  //drupal_goto('site_selection');
 }
-
-/* 
- * allow users to select the camp sites
- */
-function site_selection_form() {
-//  $options = drupal_get_query_parameters();
-  $options = drupal_get_query_parameters();
- // print_r($options);
-  dsm($options);
-  $form = array();
-  $form['locations[']['text'] = array(
-    '#markup' => '<span> '.$options['arrival_date']. '</span> ',
-  );
-  
-  $arrival_date = date_create($options['arrival_date']); // yyyy-mm-dd format
-  $departure_date = date_create($options['departure_date']);
-    
-  $interval = date_diff($arrival_date, $departure_date);
-  
-  for($i = 0; $i < $interval->format('%a') + 1; $i++) {  // six days inclusive
-      $sites = getOptions($options['arrival_date']);  
-      $form["locations"]['location'.$i] = array(
-        '#type' => 'select',
-        //'#title' => 'Arrival Date:  '.$options['arrival_date'],
-        '#options' => $sites,
-         '#markup' => '<span> '.$options['arrival_date']. '</span> ',
-      );
-    
-  }
-
-
-  $form['camp_select'] = array(
-    '#type' => 'submit',
-    '#value' => t('Submit'),
-  );   
-  return $form;
-}
-
-/*
- * Given two dates (String in yyyy-mm-dd) format, return the days in between
- */
-function cal_days() {
-  
-  
-}
-
-/*
- * get the list of camp sites available given the date
- */
-function getOptions($this_date) {
-  //$sql = db_select('site_info', 'si')->extend('PagerDefault');
-  $sql = db_select('site_info', 'si');
-  $sql->fields('si', array('id','fullname'))
-      ->condition('capacity',0, '>'); // capacity > 0
-      //->orderBy('s','AESC');
-//  $results = db_query('SELECT si.id, si.fullname
-//    FROM {site_info} WHERE si.capacity > 0');
-  $results = $sql->execute();
-  //dsm($results);
-  $rows = array();
-  $i = 0;
-  foreach($results AS $result) {
-    $rows[$i] = $result->id . ' '. $result->fullname;    
-    $i++;    
-  };
-  //dsm($i);
- return $rows;    
-//  
-//  $headers = array(t('ID'), t('Full name'), t('Capacity'));
-//  $rows = array();
-//  foreach ($results AS $result) {
-//    $rows[] = array(
-//        $result->id,
-//        $result->fullname,
-//        $result->capacity,   
-//      );    
-//  }
-//  return theme('table', array('header' => $headers, 'rows' => $rows));
-  
-}
-
-

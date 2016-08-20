@@ -6,8 +6,7 @@
  * and open the template in the editor.
  */
 function site_adminstration_form($form, $form_state) {
-  $form = array();
-  
+  $form = array();  
   $header = array(
     'camp_site_id' => t('Camp Site ID'),
     'fullname' => t('Name'),
@@ -55,8 +54,14 @@ function site_adminstration_form($form, $form_state) {
     $form['submit'] = array(
       '#type' => 'submit',
       '#value' => t('Submit'),
+      '#submit' => array('admin_return'),
     );
   return $form; 
+}
+
+function admin_return($form, &$form_state) {
+  drupal_goto('site_reservation');
+  
 }
 //
 //// process submitted form

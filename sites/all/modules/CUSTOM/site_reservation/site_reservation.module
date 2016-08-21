@@ -63,7 +63,8 @@ function site_reservation_menu() {
   );
   
   $items['site_submitted_itinerary'] = array(
-    'title' => 'Your trip has been submitted for review.',
+    'title' => 'What\'s next?',
+    //'prefix' =>
     'type' => MENU_SUGGESTED_ITEM,
     'description' => 'Print out the user itinerary page after submission',
    // 'page callback' => 'site_submitted_itinerary_form', // match the function defined below
@@ -126,11 +127,7 @@ function site_reservation_form($form, &$form_state) {
     '#value' => t('Submit'),
     '#submit' => array('site_reservation_sumbit_handler'),
     );  
-    
  
-  
-
-  
   return $form;
 }
 

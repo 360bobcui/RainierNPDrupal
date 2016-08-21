@@ -86,13 +86,13 @@ function site_reservation_schema(){
   'description' => 'table for permits',
   'fields' => array(
     'id' => array(
-      'description' => 'site id',
-      'type' => 'int',
+      'description' => 'permit id',
+      'type' => 'serial',
       'length' => 11,
       'not null' => TRUE,
     ),
     'uid' => array(
-      'description' => 'user id',
+      'description' => 'user id defined in global user',
       'type' => 'int',
       'length' => 11,
       'not null' => TRUE,
@@ -238,6 +238,16 @@ function site_reservation_schema(){
     ),
     'period' => array(
       'description' => 'itinerary period, e.g. 2016-08-09 > 2016-09-10. number of days should match itinerary',
+      'type' => 'text',
+      'not null' => TRUE,
+    ),
+      'status' => array(
+      'description' => '0 pending, 1 approved, 2 disapproved',
+      'type' => 'int',
+      'not null' => TRUE,
+    ),
+    'date_stamp' => array(
+      'description' => 'date the itinerary submitted',
       'type' => 'text',
       'not null' => TRUE,
     ),

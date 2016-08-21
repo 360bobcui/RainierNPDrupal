@@ -146,18 +146,13 @@ function site_selection_submit_handler($form, &$form_state) {
   $nid = db_insert('site_pending_itinerary')
       ->fields(array(
          'uid' => $user->uid,
-         'itinerary' => $itinerary,
+         'itinerary' => trim($itinerary),
          'period' => $period,
+        'status'=> 0,
+        'date_stamp' => date('Y-m-d', time()),  // yyyy-mm-dd
         ))
       ->execute();    
-  
-  
-  
   drupal_goto('site_submitted_itinerary');
   //drupal_goto('site_submitted_itinerary', $options);
 }
 
-//function site_submitted_itinerary_form() {
-//  $form = array();
-//  return $form;
-//}
